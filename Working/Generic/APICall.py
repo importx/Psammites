@@ -1,3 +1,5 @@
+import sys
+sys.path.append("./")
 from subprocess import PIPE
 from subprocess import Popen
 import json
@@ -20,9 +22,15 @@ class APICall(object):
     self.server_address = server_address
     self.username = username
     self.password = password
-    self.request("curl -XGET -u {}:{} {}".format(self.username, self.password, \
-                 self.server_address))
+    
 
+  def query(self, txt):
+    request = ("curl -XGET --anyauth -u {}:{} {}/api/sessions?".format(self.username, \
+               self.password, self.server_address))
+    cmd = str(request + txt)
+    data = Popen(cmd.split(), stdout=PIPE)
+    response = data.communicate()
+    return(response)
   
 
     
